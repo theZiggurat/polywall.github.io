@@ -1,13 +1,15 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import WebGL from './components/webgl'
+import Three from './components/three'
 
 function App() {
   return (
     <div className="App">
-      <WebGL></WebGL>
+      <Three></Three>
+      
     </div>
+    
   );
 }
 
