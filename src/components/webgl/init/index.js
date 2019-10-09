@@ -1,9 +1,7 @@
 import GLC from '../glcommander';
+import ModelRenderer from '../render/modelrenderer';
+import ModelType from '../model/modeltype';
 
-const render = () => {
-    GLC.clear();
-    window.requestAnimationFrame(render);
-}
 
 export default (id) => {
     const canvas = document.querySelector(`#${id}`);
@@ -18,5 +16,18 @@ export default (id) => {
     }
 
     GLC.init(gl);
-    window.requestAnimationFrame(render);
+
+    const vertices = [
+        0.0, 0.5, 0.0,
+        -0.5, -0.5, 0.0,
+        0.5, -0.5, 0.0
+    ];
+
+    const indices = [0, 1, 2];
+    
+    GLC.clear();
+    const modelRenderer = new ModelRenderer();
+    modelRenderer.registerNewModel(new ModelType(vertices, indices), 'tri');
+    modelRenderer.addInstance('instance1', 'tri');
+    modelRenderer.render();
 }

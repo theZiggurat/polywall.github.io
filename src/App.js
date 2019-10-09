@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import WebGL from './components/webgl'
 
@@ -7,6 +6,12 @@ function App() {
   return (
     <div className="App">
       <WebGL></WebGL>
+      <h1>
+                Hello, this is my first webgl project
+            </h1>
+            <p>
+                Heres some more text
+            </p>
     </div>
   );
 }

@@ -19,12 +19,8 @@ export default class WebGL extends React.Component {
     render() {
         return <div>
             <canvas id="webgl" className="canvas"
-                    onMouseMove={(e)=>this.onMove(e)}>
-                        
+                    onMouseMove={(e)=>this.onMove(e)}>    
             </canvas>    
-            <h1>
-                Hello, this is my first webgl project
-            </h1>
         </div>
     }
 }
