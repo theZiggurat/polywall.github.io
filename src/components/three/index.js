@@ -19,10 +19,9 @@ export default class Three extends React.Component {
     render() {
         return <div >
             <canvas id="three" className="canvas"
-                onMouseMove={(e)=>this.onMove(e)}
-                onClick={(e)=>this.saveImage(e)}>
+                onMouseMove={(e)=>this.onMove(e)}>
                 </canvas>
-            <a id="download" className="button" href="#" download="image.png">
+            <a id="download" className="button" href="#">
                 Download
             </a>
         </div>
