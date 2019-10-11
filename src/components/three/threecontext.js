@@ -1,17 +1,30 @@
 import * as THREE from 'three';
 import MeshGen from '../../meshgen';
-import Three from '.';
-import { Vector3 } from 'three/build/three.module';
+import Maps from './maps';
 
 export default class ThreeContext {
     constructor(id) {
 
+        this.materialSettings = {
+            roughness: 1.0,
+            roughnessMap: Maps.rough1,
+            roughnessMapChanged: true,
+            vertexColors: THREE.FaceColors
+        };
+
+        this.sceneSettings = {
+            ambientColor: '#0055AA',
+            ambientIntensity: 0.5,
+            dirColor: '#FFFFFF',
+            dirIntensity: 0.9,
+        }
+
         this.canvas = document.getElementById(id);
 
         this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera( 65, this.canvas.clientWidth /  this.canvas.clientHeight, 0.1, 1000 );
-        
-        console.log(this.canvas.innerWidth);
+        this.camera = new THREE.PerspectiveCamera( 75, this.canvas.clientWidth /  this.canvas.clientHeight, 0.1, 1000 );
+        this.camera.position.z = 2.5;
+
         this.renderer = new THREE.WebGLRenderer( {
             canvas: this.canvas,
             preserveDrawingBuffer: true,
@@ -20,33 +33,13 @@ export default class ThreeContext {
         
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
 
-        var light = new THREE.AmbientLight(0xffffff, 0.5);
-        this.scene.add(light);
-
-        this.dirlight = new THREE.DirectionalLight(0xffffff, 2);
-        this.dirlight.castShadow = true;
-        this.dirlight.shadowCameraLeft = -10;
-        this.dirlight.shadowCameraRight = 10;
-        this.dirlight.shadowCameraTop = 10;
-        this.dirlight.shadowCameraBottom = -10;
-        this.scene.add(this.dirlight);
+        
 
         this.scene.background = new THREE.Color(0x8FbCD4);
+        this.material = new THREE.MeshStandardMaterial({});
+        this.loader = new THREE.TextureLoader().setCrossOrigin(true);
 
-        var geometry = MeshGen();
-        var material = new THREE.MeshLambertMaterial({
-        });
-        material.vertexColors = THREE.FaceColors;
         
-        this.cube = new THREE.Mesh( geometry, material );
-        this.cube.castShadow = true;
-        this.cube.receiveShadow = true;
-        this.scene.add( this.cube );
-
-        var helper = new THREE.CameraHelper(this.dirlight.shadow.camera);
-        this.scene.add(helper);
-
-        this.camera.position.z = 5;
 
         this.lastX = 0.0;
         this.lastY = 0.0;
@@ -54,33 +47,74 @@ export default class ThreeContext {
         this.dy = 0.0;
         this.dragging = false;
 
-        console.log(this.dirlight.position);
-
         this.canvas.addEventListener("mousedown", (e) => this.setDrag(true));
         this.canvas.addEventListener("mouseup", (e) => this.setDrag(false));
         this.canvas.addEventListener("mousemove", this.updateMouse);
         this.canvas.addEventListener("mouseleave", (e) => this.setDrag(false));
+        this.canvas.addEventListener("wheel", (e) => {
+            this.camera.position.z = Math.min(10, Math.max(2, this.camera.position.z + e.deltaY * 0.002));
+            e.preventDefault();
+        });
+
+        window.addEventListener('resize', (e) => {
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize( window.innerWidth, window.innerHeight );
+        });
         
+    }
+
+    genModel(basecolor) {
+        
+        this.mesh = MeshGen(basecolor);
+        this.scene.remove(this.model);
+        this.model = new THREE.Mesh(this.mesh, this.material);
+        this.scene.add(this.model);
+    }
+
+    genLights() {
+        this.scene.remove(this.ambientlight, this.dirlight);
+        this.ambientlight = new THREE.AmbientLight(
+            this.sceneSettings.ambientColor, this.sceneSettings.ambientIntensity);
+        this.dirlight = new THREE.DirectionalLight(
+            this.sceneSettings.dirColor, this.sceneSettings.dirIntensity
+        );
+        this.scene.add(this.dirlight, this.ambientlight);
+    }
+
+    updateMaterial() {
+        if(this.materialSettings.roughnessMap && this.materialSettings.roughnessMapChanged) {
+            
+            this.loader.load(this.materialSettings.roughnessMap, (tex) => {
+                console.log(tex);
+                tex.repeat = new THREE.Vector2(1,1);
+                tex.wrapS = THREE.RepeatWrapping;
+                tex.wrapT = THREE.RepeatWrapping;
+                this.material.roughnessMap = tex;
+            })
+            this.materialSettings.roughnessMapChanged = false;
+        }
+        this.material.vertexColors = THREE.FaceColors;
+        this.material.roughness = this.materialSettings.roughness;
+        this.material.needsUpdate = true;
     }
 
     setDrag(drag) {
         this.dragging = drag;
     }
 
-    
-
     updateMouse = (e) => {
         this.dx = e.clientX - this.canvas.clientWidth / 2;
         this.dy = e.clientY - this.canvas.clientHeight / 2;
     }
 
-    
-
     render = () => {
         requestAnimationFrame(this.render );
         if  (this.dragging) {
-            this.dirlight.position.set(-this.dx / 200, -this.dy / 200, 0);
+            this.dirlight.position.set(this.dx / 200, -this.dy / 200, 0);
         }
+
+        //this.cube.rotateY(0.01);
 
         this.renderer.render( this.scene, this.camera );
     }

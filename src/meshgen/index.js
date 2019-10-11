@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export default function (scale) {
+export default function (basecolor) {
     var geometry = new THREE.Geometry();
 
     
@@ -15,10 +15,11 @@ export default function (scale) {
 
     var index = 0;
 
-    var basecolor = new THREE.Color(0x0006b1);
-
     var x = Math.ceil((rightbound - leftbound) / trisize);
     var y = Math.ceil((topbound - bottombound) / trisize);
+
+    
+    let color = new THREE.Color(basecolor);
 
     var map = [];
     for(let i = 0; i < x; i++) {
@@ -45,9 +46,9 @@ export default function (scale) {
     
             var offset = index;
             var face1 = new THREE.Face3(offset+1, offset, offset + 2);
-            face1.color = generateColor(basecolor);
+            face1.color = generateColor(color);
             var face2 = new THREE.Face3(offset+2, offset, offset + 3);
-            face2.color = generateColor(basecolor);
+            face2.color = generateColor(color);
             geometry.faces.push(face1, face2);
     
             index+=4;
@@ -55,8 +56,35 @@ export default function (scale) {
         
     }
     geometry.computeFaceNormals();
+    assignUVs(geometry);
     return geometry;
 
+}
+
+function assignUVs(geometry) {
+    geometry.computeBoundingBox();
+
+    var max = geometry.boundingBox.max,
+        min = geometry.boundingBox.min;
+    var offset = new THREE.Vector2(0 - min.x, 0 - min.y);
+    var range = new THREE.Vector2(max.x - min.x, max.y - min.y);
+    var faces = geometry.faces;
+
+    geometry.faceVertexUvs[0] = [];
+
+    for (var i = 0; i < faces.length ; i++) {
+
+        var v1 = geometry.vertices[faces[i].a], 
+            v2 = geometry.vertices[faces[i].b], 
+            v3 = geometry.vertices[faces[i].c];
+
+        geometry.faceVertexUvs[0].push([
+            new THREE.Vector2((v1.x + offset.x)/range.x *2,(v1.y + offset.y)/range.y * 2),
+            new THREE.Vector2((v2.x + offset.x)/range.x *2,(v2.y + offset.y)/range.y * 2),
+            new THREE.Vector2((v3.x + offset.x)/range.x *2,(v3.y + offset.y)/range.y * 2)
+        ]);
+    }
+    geometry.uvsNeedUpdate = true;
 }
 
 function generateColor(basecolor) {
