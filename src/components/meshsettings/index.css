@@ -1,0 +1,13 @@
+@import '../../../node_modules/antd/dist/antd.css';
+
+.meshSettings {
+    width: 250px;
+}
+
+.input {
+    width: 70px;
+}
+
+.title {
+    margin-top: 5px;
+}

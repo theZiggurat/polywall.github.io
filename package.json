@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^3.23.6",
     "react": "^16.10.2",
     "react-color": "^2.17.3",
     "react-dom": "^16.10.2",
     "react-scripts": "3.2.0",
+    "react-scroll-horizontal": "^1.6.2",
     "three": "^0.109.0"
   },
   "scripts": {

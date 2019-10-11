@@ -1,9 +1,12 @@
 import * as THREE from 'three';
-import MeshGen from '../../meshgen';
+import MeshGen from '../meshgen';
 import Maps from './maps';
+import Constants from '../constants';
+import { PointLight } from 'three';
+import Three from '../components/three';
 
-export default class ThreeContext {
-    constructor(id) {
+class _ThreeContext {
+    constructor() {
 
         this.materialSettings = {
             roughness: 1.0,
@@ -19,9 +22,23 @@ export default class ThreeContext {
             dirIntensity: 0.9,
         }
 
-        this.canvas = document.getElementById(id);
-
         this.scene = new THREE.Scene();
+        this.raycaster = new THREE.Raycaster();
+        this.scene.background = new THREE.Color(0x8FbCD4);
+        this.material = new THREE.MeshStandardMaterial({});
+        this.loader = new THREE.TextureLoader().setCrossOrigin(true);
+
+        this.lastX = 0.0;
+        this.lastY = 0.0;
+        this.dx = 0.0;
+        this.dy = 0.0;
+        this.dragging = false;
+
+        this.ndc = new THREE.Vector2();
+    }
+
+    registerCanvas(id) {
+        this.canvas = document.getElementById(id);
         this.camera = new THREE.PerspectiveCamera( 75, this.canvas.clientWidth /  this.canvas.clientHeight, 0.1, 1000 );
         this.camera.position.z = 2.5;
 
@@ -32,24 +49,11 @@ export default class ThreeContext {
         } );
         
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        this.raycaster = new THREE.Raycaster();
-        
 
-        this.scene.background = new THREE.Color(0x8FbCD4);
-        this.material = new THREE.MeshStandardMaterial({});
-        this.loader = new THREE.TextureLoader().setCrossOrigin(true);
-
-        
-
-        this.lastX = 0.0;
-        this.lastY = 0.0;
-        this.dx = 0.0;
-        this.dy = 0.0;
-        this.dragging = false;
-
-        this.ndc = new THREE.Vector2();
-
-        this.canvas.addEventListener("mousedown", (e) => this.setDrag(true));
+        this.canvas.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            this.setDrag(true);
+        });
         this.canvas.addEventListener("mouseup", (e) => this.setDrag(false));
         this.canvas.addEventListener("mousemove", this.updateMouse);
         this.canvas.addEventListener("mouseleave", (e) => this.setDrag(false));
@@ -66,51 +70,41 @@ export default class ThreeContext {
         
     }
 
+    registerLight(type, name) {
+        console.log(type, name);
+        let newlight;
+        switch (type) {
+            case 'point':
+                newlight = new THREE.PointLight(Constants.DEFAULT_COLOR);
+                break;
+            case 'directional':
+                newlight = new THREE.DirectionalLight(Constants.DEFAULT_COLOR);
+                break;
+            case 'ambient':
+                newlight = new THREE.AmbientLight(Constants.DEFAULT_COLOR);
+                break;
+            default:
+                return;
+            
+        }
+        newlight.name = name;
+        this.scene.add(newlight);
+    }
+
+    updateLight(name, color){
+        let light = this.scene.getObjectByName(name);
+        if(light === undefined) return;
+        light.color = new THREE.Color(color.hex);
+        light.intensity = color.rgb.a;
+    }
+
     genModel(basecolor) {
         
-        this.mesh = MeshGen(basecolor);
+        this.mesh = MeshGen.generate(basecolor);
         this.scene.remove(this.model);
         this.model = new THREE.Mesh(this.mesh, this.material);
         this.model.name = 'wallpaper';
         this.scene.add(this.model);
-    }
-
-    genLights() {
-        this.scene.remove(this.ambientlight, this.dirlight);
-        this.ambientlight = new THREE.AmbientLight(
-            this.sceneSettings.ambientColor, this.sceneSettings.ambientIntensity);
-        this.dirlight = new THREE.DirectionalLight(
-            this.sceneSettings.dirColor, this.sceneSettings.dirIntensity
-        );
-        this.scene.add(this.dirlight, this.ambientlight);
-
-        // this.scene.remove(this.light1);
-        // this.light1 = new THREE.PointLight('#FF0000', 1, 100);
-        // this.light1.position.set(0, 0, 1.5);
-
-        // var sphere = new THREE.SphereBufferGeometry( 0.5, 16, 8 );
-        // this.light1model = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial());
-        // this.light1.add(this.light1model);
-        // this.light1.name = 'pointlight';
-        // this.scene.add(this.light1, this.light1helper);
-    }
-
-    updateAmbientLight(color) {
-        this.ambientlight.color.set(new THREE.Color(color.hex));
-        this.ambientlight.intensity.set(color.rgb.a);
-    }
-
-    updateDirectionalLight(color) {
-        this.dirlight.color.set(new THREE.Color(color.hex));
-        this.dirlight.intensity.set(color.rgb.a);
-    }
-
-    updatePointLight1(color) {
-        // var tc = new THREE.Color(color.hex);
-        // this.light1.color.set(tc);
-        // this.light1.intensity.set(color.rgb.a);
-        // this.light1model.color.set(tc);
-
     }
 
     updateMaterial() {
@@ -121,7 +115,7 @@ export default class ThreeContext {
                 tex.repeat = new THREE.Vector2(4,4);
                 tex.wrapS = THREE.RepeatWrapping;
                 tex.wrapT = THREE.RepeatWrapping;
-                tex.anisotropy = this.renderer.getMaxAnisotropy();
+                tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
                 this.material.roughnessMap = tex;
             })
             this.materialSettings.roughnessMapChanged = false;
@@ -154,7 +148,7 @@ export default class ThreeContext {
             //     console.log(intersects);
             //     this.light1.position.set(this.ndc.x, this.ndc.y, 2);
             // } else {
-                this.dirlight.position.set(this.dx / 200, -this.dy / 200, 0);
+                //this.dirlight.position.set(this.dx / 200, -this.dy / 200, 0);
             //}
         }
 
@@ -163,3 +157,6 @@ export default class ThreeContext {
         this.renderer.render( this.scene, this.camera );
     }
 }
+
+const ThreeContext = new _ThreeContext();
+export default ThreeContext;
