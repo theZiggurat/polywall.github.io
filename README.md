@@ -3,7 +3,7 @@
  React website that generates low poly wallpapers with THREE.js.
  
 
-![GitHub Logo](https://github.com/theZiggurat/polywall/blob/master/pics/example.PNG)
+![GitHub Logo](https://github.com/theZiggurat/polywall/blob/master/pics/progress.PNG)
 
 
 
@@ -16,8 +16,4 @@ TODO:
 
 Try: 
   * Navigate to root
-<<<<<<< HEAD
   * Run with *npm start*
-=======
-  * Run with *npm start*
->>>>>>> 4b2dccbaabecce6481a642b38c511ef985babda8
