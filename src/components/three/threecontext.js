@@ -32,7 +32,7 @@ export default class ThreeContext {
         } );
         
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-
+        this.raycaster = new THREE.Raycaster();
         
 
         this.scene.background = new THREE.Color(0x8FbCD4);
@@ -46,6 +46,8 @@ export default class ThreeContext {
         this.dx = 0.0;
         this.dy = 0.0;
         this.dragging = false;
+
+        this.ndc = new THREE.Vector2();
 
         this.canvas.addEventListener("mousedown", (e) => this.setDrag(true));
         this.canvas.addEventListener("mouseup", (e) => this.setDrag(false));
@@ -69,6 +71,7 @@ export default class ThreeContext {
         this.mesh = MeshGen(basecolor);
         this.scene.remove(this.model);
         this.model = new THREE.Mesh(this.mesh, this.material);
+        this.model.name = 'wallpaper';
         this.scene.add(this.model);
     }
 
@@ -80,6 +83,34 @@ export default class ThreeContext {
             this.sceneSettings.dirColor, this.sceneSettings.dirIntensity
         );
         this.scene.add(this.dirlight, this.ambientlight);
+
+        // this.scene.remove(this.light1);
+        // this.light1 = new THREE.PointLight('#FF0000', 1, 100);
+        // this.light1.position.set(0, 0, 1.5);
+
+        // var sphere = new THREE.SphereBufferGeometry( 0.5, 16, 8 );
+        // this.light1model = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial());
+        // this.light1.add(this.light1model);
+        // this.light1.name = 'pointlight';
+        // this.scene.add(this.light1, this.light1helper);
+    }
+
+    updateAmbientLight(color) {
+        this.ambientlight.color.set(new THREE.Color(color.hex));
+        this.ambientlight.intensity.set(color.rgb.a);
+    }
+
+    updateDirectionalLight(color) {
+        this.dirlight.color.set(new THREE.Color(color.hex));
+        this.dirlight.intensity.set(color.rgb.a);
+    }
+
+    updatePointLight1(color) {
+        // var tc = new THREE.Color(color.hex);
+        // this.light1.color.set(tc);
+        // this.light1.intensity.set(color.rgb.a);
+        // this.light1model.color.set(tc);
+
     }
 
     updateMaterial() {
@@ -87,9 +118,10 @@ export default class ThreeContext {
             
             this.loader.load(this.materialSettings.roughnessMap, (tex) => {
                 console.log(tex);
-                tex.repeat = new THREE.Vector2(1,1);
+                tex.repeat = new THREE.Vector2(4,4);
                 tex.wrapS = THREE.RepeatWrapping;
                 tex.wrapT = THREE.RepeatWrapping;
+                tex.anisotropy = this.renderer.getMaxAnisotropy();
                 this.material.roughnessMap = tex;
             })
             this.materialSettings.roughnessMapChanged = false;
@@ -106,12 +138,24 @@ export default class ThreeContext {
     updateMouse = (e) => {
         this.dx = e.clientX - this.canvas.clientWidth / 2;
         this.dy = e.clientY - this.canvas.clientHeight / 2;
+        this.ndc.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+		this.ndc.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
     }
 
     render = () => {
         requestAnimationFrame(this.render );
+        
+
         if  (this.dragging) {
-            this.dirlight.position.set(this.dx / 200, -this.dy / 200, 0);
+            //this.raycaster.setFromCamera(this.ndc, this.camera);
+            //var intersects = this.raycaster.intersectObjects( this.scene.children, true);
+            
+            // if(intersects.includes(this.light1)) {
+            //     console.log(intersects);
+            //     this.light1.position.set(this.ndc.x, this.ndc.y, 2);
+            // } else {
+                this.dirlight.position.set(this.dx / 200, -this.dy / 200, 0);
+            //}
         }
 
         //this.cube.rotateY(0.01);

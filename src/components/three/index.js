@@ -66,6 +66,10 @@ export default class Three extends React.Component {
                 <button id="download" className="button1" href="#">
                     Download
                 </button>
+                <button id="material" className="button1" href="#"
+                onClick={(e)=>this.three.updateMaterial()}>
+                    Material
+                </button>
             </div>
         </div>
     }

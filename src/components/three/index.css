@@ -26,8 +26,8 @@
 }
 
 .settings {
-    padding: 10px;
-    margin-left: 10px;
+    background-color: #EEE;
+    padding: 4px;
     width: 100vw;
     height: fit-content;
     display: flex;
