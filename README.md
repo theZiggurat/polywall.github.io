@@ -16,4 +16,8 @@ TODO:
 
 Try: 
   * Navigate to root
+<<<<<<< HEAD
   * Run with *npm start*
+=======
+  * Run with *npm start*
+>>>>>>> 4b2dccbaabecce6481a642b38c511ef985babda8
