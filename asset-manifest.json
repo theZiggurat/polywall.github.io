@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/polywall/static/css/main.64a24724.chunk.css",
-    "main.js": "/polywall/static/js/main.3fdddb4c.chunk.js",
-    "main.js.map": "/polywall/static/js/main.3fdddb4c.chunk.js.map",
+    "main.js": "/polywall/static/js/main.11b4a155.chunk.js",
+    "main.js.map": "/polywall/static/js/main.11b4a155.chunk.js.map",
     "runtime-main.js": "/polywall/static/js/runtime-main.057e0e74.js",
     "runtime-main.js.map": "/polywall/static/js/runtime-main.057e0e74.js.map",
     "static/css/2.802837ff.chunk.css": "/polywall/static/css/2.802837ff.chunk.css",
     "static/js/2.2df4b433.chunk.js": "/polywall/static/js/2.2df4b433.chunk.js",
     "static/js/2.2df4b433.chunk.js.map": "/polywall/static/js/2.2df4b433.chunk.js.map",
     "index.html": "/polywall/index.html",
-    "precache-manifest.c88191686e3f5099c819624043f92742.js": "/polywall/precache-manifest.c88191686e3f5099c819624043f92742.js",
+    "precache-manifest.0e0d068cac02301f8a0fa58233e0381e.js": "/polywall/precache-manifest.0e0d068cac02301f8a0fa58233e0381e.js",
     "service-worker.js": "/polywall/service-worker.js",
     "static/css/2.802837ff.chunk.css.map": "/polywall/static/css/2.802837ff.chunk.css.map",
     "static/css/main.64a24724.chunk.css.map": "/polywall/static/css/main.64a24724.chunk.css.map"
@@ -19,6 +19,6 @@
     "static/css/2.802837ff.chunk.css",
     "static/js/2.2df4b433.chunk.js",
     "static/css/main.64a24724.chunk.css",
-    "static/js/main.3fdddb4c.chunk.js"
+    "static/js/main.11b4a155.chunk.js"
   ]
 }

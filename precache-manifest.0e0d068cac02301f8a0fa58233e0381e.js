@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d98f34d28f4ce7eae11b58fa9ab83b87",
+    "revision": "a186c1290a8b9ffb2a1bc21bf3a1ea40",
     "url": "/polywall/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/polywall/static/css/2.802837ff.chunk.css"
   },
   {
-    "revision": "4fd11ee25b3d84a81562",
+    "revision": "d3fce086e79c1448fce6",
     "url": "/polywall/static/css/main.64a24724.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/polywall/static/js/2.2df4b433.chunk.js"
   },
   {
-    "revision": "4fd11ee25b3d84a81562",
-    "url": "/polywall/static/js/main.3fdddb4c.chunk.js"
+    "revision": "d3fce086e79c1448fce6",
+    "url": "/polywall/static/js/main.11b4a155.chunk.js"
   },
   {
     "revision": "48aef0d00efe25b0c6a8",
