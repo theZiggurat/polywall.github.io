@@ -2,7 +2,7 @@
   "name": "react-webgl",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://theZiggurat.github.io/polywall/",
+  "homepage": "https://theziggurat.github.io/",
   "dependencies": {
     "antd": "^3.23.6",
     "gh-pages": "^2.1.1",
