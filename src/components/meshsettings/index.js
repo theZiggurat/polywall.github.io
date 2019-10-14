@@ -1,14 +1,38 @@
 import React from 'react';
-import {Slider, InputNumber, Row, Col, Button, Card} from 'antd';
+import {Menu, Dropdown, Icon, Slider, InputNumber, Row, Col, Button, Card} from 'antd';
 import MeshGen from '../../meshgen';
 import './index.css';
+import ThreeContext from '../../threecontext';
+import Maps from '../../threecontext/maps';
+
+const Menus = ({changeTexture}) => (
+    <Menu className='menu'>
+      <Menu.Item onClick={()=>changeTexture(Maps.rough1)}>
+        Metal
+      </Menu.Item>
+      <Menu.Item onClick={() =>changeTexture(Maps.rough2)}>
+        Stucco
+      </Menu.Item>
+      <Menu.Item onClick={() => changeTexture(null)}>
+        None
+      </Menu.Item>
+    </Menu>
+  );
 
 export default class MeshSettings extends React.Component {
     constructor(props) {
         super(props);
     }
+
+    changeTexture = (tex) => {
+        ThreeContext.materialSettings.roughnessMap = tex;
+        ThreeContext.materialSettings.roughnessMapChanged = true;
+        ThreeContext.updateMaterial();
+    }
+
     render() {
-        return <Card size="small" title="Mesh Settings" className='card'>
+        return <Card size="small" title="Mesh Settings" className='card basis'>
+            <div className="divider">
             <Row className="meshSettings">
                 <DecimalSlider 
                     title="Triangle Size:"
@@ -23,7 +47,7 @@ export default class MeshSettings extends React.Component {
             <Row className="meshSettings">
                 <DecimalSlider 
                     title="Depth offset:"
-                    onNewVal={(v) => MeshGen.trisize = v}
+                    onNewVal={(v) => MeshGen.depthOffsetMultiplier = v}
                     min={0.2}
                     max={1.0}
                     step={0.02}
@@ -34,7 +58,7 @@ export default class MeshSettings extends React.Component {
             <Row className="meshSettings">
                 <DecimalSlider 
                     title="Lateral offset:"
-                    onNewVal={(v) => MeshGen.trisize = v}
+                    onNewVal={(v) => MeshGen.lateralOffsetMultiplier=v}
                     min={0.2}
                     max={1.0}
                     step={0.02}
@@ -42,11 +66,17 @@ export default class MeshSettings extends React.Component {
                 />
                 
             </Row>
-            <Row className="meshSettings">
-                <Button type="primary" size="medium">
-                    Generate
-                </Button>
+            <Row style={{marginTop: "10px"}}>
+                <Dropdown overlay={<Menus changeTexture={this.changeTexture}/>}>
+                    <Button type="default">
+                        Texture <Icon type="down"/>
+                    </Button>
+                </Dropdown>
             </Row>
+            <Button type="primary" className="generate" onClick={ThreeContext.genModel}>
+                Generate
+            </Button>
+            </div>
         </Card>
     }
 }

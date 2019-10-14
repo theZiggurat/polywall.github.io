@@ -30,7 +30,7 @@ export default class MaterialSettings extends React.Component {
     };
     
     render() {
-        return <Card size="small" title="Material Settings" className='card basis'
+        return <Card size="small" title="Material Settings" className='card basis color'
                 tabList={tabList}
                 activeTabKey={this.state.key}
                 onTabChange={key => {

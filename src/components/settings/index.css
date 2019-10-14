@@ -5,6 +5,7 @@
 }
 
 .card {
+    padding: 0px;
     margin: 4px;
     border-radius: 10px;
 }
@@ -17,7 +18,7 @@
 .grow {
     flex-grow: 1;
     flex-shrink: 1;
-    max-width: 50%;
+    max-width: 75%;
 }
 
 .basis {

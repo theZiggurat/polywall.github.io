@@ -2,10 +2,7 @@ import * as THREE from 'three';
 
 class MeshGenerator {
 
-    generate (basecolor) {
-        var geometry = new THREE.Geometry();
-
-        
+    constructor() {
         this.leftbound = -25.0;
         this.rightbound = 25.0;
         this.topbound = 10.0;
@@ -14,6 +11,15 @@ class MeshGenerator {
         this.lateralOffsetMultiplier = 0.5;
         this.depthOffsetMultiplier = 0.4;
         this.trisize = 0.4;
+    }
+
+    generate (basecolor) {
+        var geometry = new THREE.Geometry();
+
+        
+
+        
+        
 
         var index = 0;
 
@@ -92,6 +98,11 @@ class MeshGenerator {
     generateColor(basecolor) {
         const colorOffset = 0.1;
         return basecolor.clone().addScalar(Math.random()*colorOffset);
+    }
+
+    setTriSize(size) {
+        console.log(size);
+        this.trisize = size;
     }
 }
 

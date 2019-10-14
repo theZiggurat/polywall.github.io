@@ -14,7 +14,6 @@ export default class Settings extends React.Component {
             <div className="horizontal">
                 <ColorSettings />
                 <MeshSettings />
-                <MaterialSettings />
                 <Publisher />
             </div>
     </div>
