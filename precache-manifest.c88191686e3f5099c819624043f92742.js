@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a78a273a5edc6f7d3e482588b5450bd4",
+    "revision": "d98f34d28f4ce7eae11b58fa9ab83b87",
     "url": "/polywall/index.html"
   },
   {
