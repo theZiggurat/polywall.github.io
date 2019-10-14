@@ -3,17 +3,9 @@
  React website that generates low poly wallpapers with THREE.js.
  
 
-![GitHub Logo](https://github.com/theZiggurat/polywall/blob/master/pics/progress.PNG)
+[Link to published site here](https://theziggurat.github.io/polywall/)
 
 
 
 TODO:
- * Color options
- * Resolution Option
- * More advanced lighting options
- * More advanced mesh generation options
  * WASM raytraced final render
-
-Try: 
-  * Navigate to root
-  * Run with *npm start*
